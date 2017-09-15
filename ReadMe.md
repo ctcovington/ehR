@@ -1,20 +1,13 @@
 # ehR
 
--------
-NOTE: THIS VERSION OF THE REPOSITORY IS NO LONGER ACTIVELY MAINTAINED 
-
-_Please see https://github.com/sysmedlab/ehR_
-
-
-------
-
 **Install** 
 
 ```
 library("devtools")  
-install_github("claramarquardt/ehR",dependencies = TRUE)    
+install_github("sysmedlab/ehR",dependencies = TRUE)    
 library(ehR)
 ```  
+
 **Documentation**
 - See 'function_overview.csv' for an overview of all the functions (and data sets) included in the package 
 
@@ -59,7 +52,7 @@ loadfonts()
 - To Contribute:
 ````
 # 1. Clone the repo
-git clone https://github.com/ClaraMarquardt/ehR.git
+git clone https://github.com/sysmedlab/ehR.git
 
 # 2. Make/Save any changes 
 - Ensure that all dependencies are included in @import statements at the function top and are 
@@ -80,7 +73,7 @@ any changes: 'package_management/contribution_guide.txt'
 
 # 4. Test by installing from the branch
 library(devtools)
-install_git("git://github.com/ClaraMarquardt/ehR.git", branch = "[branch name])
+install_git("git://github.com/sysmedlab/ehR.git", branch = "[branch name])
 ````
 
 - Package Management Tools
