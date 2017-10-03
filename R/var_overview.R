@@ -14,6 +14,8 @@
 #' @param data_name file title (printed at the top of the overview) (character).
 #' @param alternative_id_name alternative observation unit, e.g. "patients" in a diagnosis file with multiple diagnoses per patient (character).
 #' @param alternative_id name of column corresponding to the alternative_id_name (character).
+#' @param sort whether to sort the overview by variable type ("var_type") or variable name ("var_name") (character) [Default: var_type].
+
 #' 
 #' @return Overview of dataset [data.table]
 #' 
@@ -22,7 +24,7 @@
 #' print(str(summary_dt))
 
 var_overview <- function(data, observation_unit=NA, alternative_id=NA, 
-  alternative_id_name="/", data_name=NA) {
+  alternative_id_name="/", data_name=NA, sort="var_type") {
 
   # helper functions
   # ---------------------------
@@ -197,6 +199,10 @@ var_overview <- function(data, observation_unit=NA, alternative_id=NA,
 
   setcolorder(feature_vital_sign, c(variable_order_list))
 
+  if (sort=="var_name") {
+
+    setorder(feature_vital_sign, "var_name")
+  }
 
   data_temp <- copy(data)
   replace_na_zero_missing(data=data_temp, replace="missing") # to ensure that missingness is correctly calculated
