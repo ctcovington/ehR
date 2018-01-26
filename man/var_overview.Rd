@@ -5,7 +5,7 @@
 \title{Generate a basic overview of a dataset.}
 \usage{
 var_overview(data, observation_unit = NA, alternative_id = NA,
-  alternative_id_name = "/", data_name = NA)
+  alternative_id_name = "/", data_name = NA, sort = "var_type")
 }
 \arguments{
 \item{data}{data.table for which the overview is to be generated (data.table).}
@@ -17,6 +17,8 @@ var_overview(data, observation_unit = NA, alternative_id = NA,
 \item{alternative_id_name}{alternative observation unit, e.g. "patients" in a diagnosis file with multiple diagnoses per patient (character).}
 
 \item{data_name}{file title (printed at the top of the overview) (character).}
+
+\item{sort}{whether to sort the overview by variable type ("var_type") or variable name ("var_name") (character) [Default: var_type].}
 }
 \value{
 Overview of dataset [data.table]
