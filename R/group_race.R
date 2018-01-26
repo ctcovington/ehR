@@ -4,50 +4,35 @@
 #' 
 #' @description Convert a column in a data.table containing nuanced, specific races into the aggregated set: {white, black, hispanic, other} that is more commonly found in US medical literature.
 #' 
-#' @detail: Maintained by: Shreyas Lakhtakia
-#' 
 #' @export
 #' @import data.table
-#' @param data a data.table with the column containing races (data.table)
-#' @param race_col a string specifying the name of column containing race info, "race" by default (character)
-#' @param inplace if TRUE old race column is replaced with aggregated race infor, if FALSE (default), a new column called "race_group" is added (logical)
-#' @return data.table with the a new race_group column containing aggregated race / old column replaced with this column if inplace = TRUE (data.table)
+#' @param race_col data table column name pertaining to race. (object) 
 #' @examples
-#' mod_dem <- group_race(dem, inplace = TRUE)
-#' unique(mod_dem[, race, ], by = "race")
+#' dt <- copy(dem)
+#' dt[, race := group_race(race)]
 #' 
-#' grp_dem <- group_race(dem)
-#' unique(grp_dem[, .(race, race_group), ], by = "race")
+#' dt2 <- copy(dem)
+#' dt2[, grouped_race := group_race(race)]
 
-group_race <- function(data, race_col = "race", inplace = FALSE) {
-
-	# create copy so as to not modify provided data.table
-	fn_data <- copy(data)
-
-	# create new temporary column
-	fn_data[, race_group := "none", ]
-
+group_race <- function(race_col) {
 	# race regular expressions
 	black_race_regex    <- "black|african"
 	hispanic_race_regex <- "hispanic"
 	other_race_regex    <- "asian|native|indian"
 	white_race_regex    <- "white|european"
 
-	# convert races to grouped versions	
-	fn_data[(tolower(get(race_col)) %like% black_race_regex & race_group == "none"), race_group := "black"]
-	fn_data[(tolower(get(race_col)) %like% hispanic_race_regex & race_group == "none"), race_group := "hispanic"]
-	fn_data[(tolower(get(race_col)) %like% other_race_regex & race_group == "none"), race_group := "other"]
-	fn_data[(tolower(get(race_col)) %like% white_race_regex & race_group == "none"), race_group := "white"]
-	fn_data[race_group == "none", race_group := "other"]
+	# create data table of old race and new race vectors
+	# NOTE: this is a bit of an awkward way to do it (it'd be easy with a for loop), but I thought data table might be faster
+	#       than a for loop for very large data
+	dt <- data.table(race = tolower(race_col))
+	dt[, race_group := 'none']
 
-	# make replacement in-place if so desired
-	if(inplace){
-		fn_data[, as.character(race_col) := race_group, ]
-		fn_data[, race_group := NULL, ]
-	}
+	dt[(race %like% black_race_regex & race_group == "none"), race_group := "black"]
+	dt[(race %like% hispanic_race_regex & race_group == "none"), race_group := "hispanic"]
+	dt[(race %like% other_race_regex & race_group == "none"), race_group := "other"]
+	dt[(race %like% white_race_regex & race_group == "none"), race_group := "white"]
+	dt[race_group == "none", race_group := "other"]
 
-	# return
-	return(fn_data)
+	return(dt[, race_group])
 }
-
 #----------------------------------------------------------------------------#
