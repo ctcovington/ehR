@@ -30,11 +30,13 @@ group_race <- function(data, race_col = "race", inplace = FALSE) {
 	# race regular expressions
 	black_race_regex    <- "black|african"
 	hispanic_race_regex <- "hispanic"
+	other_race_regex    <- "asian|native|indian"
 	white_race_regex    <- "white|european"
 
 	# convert races to grouped versions	
 	fn_data[(tolower(get(race_col)) %like% black_race_regex & race_group == "none"), race_group := "black"]
 	fn_data[(tolower(get(race_col)) %like% hispanic_race_regex & race_group == "none"), race_group := "hispanic"]
+	fn_data[(tolower(get(race_col)) %like% other_race_regex & race_group == "none"), race_group := "other"]
 	fn_data[(tolower(get(race_col)) %like% white_race_regex & race_group == "none"), race_group := "white"]
 	fn_data[race_group == "none", race_group := "other"]
 
