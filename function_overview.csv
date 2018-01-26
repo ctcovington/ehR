@@ -1,5 +1,5 @@
 "function_name","function_desc"
-"clean_icd_list","Expand a list of icd9 code ranges."
+"add_quantile","Quantile-based discretization of column clean_icd_list Expand a list of icd9 code ranges."
 "code_to_human",": Format code variable names to proper names."
 "dem","Simulated EHR data - Demographics."
 "dia","Simulated EHR data - Diagnoses."
