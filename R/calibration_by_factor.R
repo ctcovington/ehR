@@ -108,7 +108,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	
 		# add line segments to plot for confidence intervals
 		if (SE_line) {
-			for (quantile in unique(plot_dt[, get(quantile_col_name))) {
+			for (quantile in unique(plot_dt[, get(quantile_col_name)])) {
 		        # gather end points of segment
 		        ci_hi <- plot_dt[get(quantile_col_name) == quantile, upper_ci, ][1]
 		        ci_lo <- plot_dt[get(quantile_col_name) == quantile, lower_ci, ][1]
