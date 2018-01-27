@@ -20,9 +20,9 @@ Discretize column values into equal-sized bins
 \examples{
 \dontrun{
 dem_dt <- copy(dem)
-dem_dt[, monthly_income_quartile:=add_pctile(monthly_income, n_quantile=4)]
+dem_dt[, monthly_income_quartile:=add_quantile(monthly_income, n_quantile=4)]
 
 dt <- as.data.table(rep(10, 100))
-dt[, decile:=add_pctile(V1, n_quantile=10)]
+dt[, decile:=add_quantile(V1, n_quantile=10)]
 }
 }
