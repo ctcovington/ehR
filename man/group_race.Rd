@@ -4,25 +4,18 @@
 \alias{group_race}
 \title{: Classify given race as one of the conventional medical groups- white, black, hispanic, other.}
 \usage{
-group_race(data, race_col = "race", inplace = FALSE)
+group_race(race_col)
 }
 \arguments{
-\item{data}{a data.table with the column containing races (data.table)}
-
-\item{race_col}{a string specifying the name of column containing race info, "race" by default (character)}
-
-\item{inplace}{if TRUE old race column is replaced with aggregated race infor, if FALSE (default), a new column called "race_group" is added (logical)}
-}
-\value{
-data.table with the a new race_group column containing aggregated race / old column replaced with this column if inplace = TRUE (data.table)
+\item{race_col}{data table column name pertaining to race. (object)}
 }
 \description{
 Convert a column in a data.table containing nuanced, specific races into the aggregated set: {white, black, hispanic, other} that is more commonly found in US medical literature.
 }
 \examples{
-mod_dem <- group_race(dem, inplace = TRUE)
-unique(mod_dem[, race, ], by = "race")
+dt <- copy(dem)
+dt[, race := group_race(race)]
 
-grp_dem <- group_race(dem)
-unique(grp_dem[, .(race, race_group), ], by = "race")
+dt2 <- copy(dem)
+dt2[, grouped_race := group_race(race)]
 }
