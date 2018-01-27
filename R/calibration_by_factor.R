@@ -5,12 +5,12 @@
 #' @description Plot calibration curve by factor column with risk quantile as x-axis
 #'
 #' @export
-#' @import data.table
 #' @import ggplot2
 #' @import dplyr
 #' @import gridExtra
 #' @import scales
 #' @import grid
+#' @import data.table
 #'
 #' @param data data.table object containing data to be plotted. (data table)
 #' @param output_file filepath to which we write plot. (character)
@@ -57,8 +57,8 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	data[, mean_obs_outcome := mean(get(outcome_col_name)), by = c(quantile_col_name, plot_by_col_name)]
 
 	# compute CI clustered by 'cluster_by_col_name' by each value of factor
-	for (factor_val in unique(dt[, get(plot_by_col_name)])) {
-		for (quantile in unique(dt[, get(quantile_col_name)])) {
+	for (factor_val in unique(data[, get(plot_by_col_name)])) {
+		for (quantile in unique(data[, get(quantile_col_name)])) {
 	         mean_plus_minus <- clustered_ci(data = data[get(quantile_col_name) == quantile & get(plot_by_col_name) == factor_val, ], obs_col_name = outcome_col_name, cluster_by_col_name = cluster_by_col_name, ci_level = 0.95)
 	         data[get(quantile_col_name) == quantile & get(plot_by_col_name) == factor_val, lower_ci := mean_obs_outcome - mean_plus_minus, ]
 	         data[get(quantile_col_name) == quantile & get(plot_by_col_name) == factor_val, upper_ci := mean_obs_outcome + mean_plus_minus, ]
