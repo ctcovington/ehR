@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustered_ci.R
 \name{clustered_ci}
 \alias{clustered_ci}
-\title{Clustered confidence intervals}
+\title{Clustered confidence intervals.}
 \usage{
 clustered_ci(data, obs_col_name, cluster_by_col_name, ci_level = 0.95)
 }

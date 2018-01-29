@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------#
 
-#' @title Clustered confidence intervals
+#' @title Clustered confidence intervals.
 #'
 #' @description Calculate confidence intervals based on standard errors clustered by group. This was done using formula and explanations at
 #'              http://www.fao.org/wairdocs/ILRI/x5436E/x5436e07.htm
@@ -8,7 +8,7 @@
 #'
 #' @export
 #' @import data.table
-#' 
+#'
 #' @param data data.table consisting, at minimum, of a column with the identifier
 #              to cluster by, and a column containing the samples whose x% CI
 #              values are to be returned. Each row must represent a single sample. (data table)
@@ -18,7 +18,7 @@
 #' @param ci_level level of confidence for confidence intervals (provided as a decimal < 1). (numeric)
 #'
 #' @return value that should be added and subtracted from the raw mean to yield the x% CIs
-#' 
+#'
 #' @examples \dontrun{
 #' data <- copy(ehR_cohort)
 #' cis <- clustered_ci(data, obs = 'test', cluster_by_col_name = 'empi', ci_level = 0.95)
@@ -61,9 +61,3 @@ clustered_ci <- function(data, obs_col_name, cluster_by_col_name, ci_level = 0.9
 	estimate_plus_minus <- multiplier*SE
 	return(estimate_plus_minus)
 }
-
-
-
-
-
-

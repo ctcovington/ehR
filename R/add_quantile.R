@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------#
 
-#' @title Quantile-based discretization of column
+#' @title Quantile-based discretization of column.
 #'
 #' @description Discretize column values into equal-sized bins
 #'
