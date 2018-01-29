@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_quantile.R
 \name{add_quantile}
 \alias{add_quantile}
-\title{Quantile-based discretization of column}
+\title{Quantile-based discretization of column.}
 \usage{
 add_quantile(col, n_quantile)
 }
