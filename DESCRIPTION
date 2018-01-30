@@ -1,7 +1,11 @@
 Package: ehR
 Title: A collection of R functions designed to facilitate the interaction with and analysis of EHR data.
 Version: 0.0.0.9000
-Authors@R: c(person("Clara", "Marquardt", email = "marquardt.clara@gmail.com", role = c("cre")), person("Shreyas", "Lakhtakia", email="slakhtakia@bwh.harvard.edu", role=c("aut")))
+Authors@R: c(person("Clara", "Marquardt", email = "marquardt.clara@gmail.com", role = c("cre")), 
+             person("Shreyas", "Lakhtakia", email="slakhtakia@bwh.harvard.edu", role = c("aut")),
+             person("Katie", "Lin", email="katielin2532@gmail.com", role = c("aut"))
+             person("Christian", "Covington", email="christian.t.covington@gmail.com", role = c("aut"))
+             )
 Description: /
 Depends: R (>= 3.3.1)
 License: ...
