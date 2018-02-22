@@ -16,18 +16,20 @@
 #' @param output_file filepath to which we write plot. (character)
 #' @param outcome_col_name column name of outcome for which we want the mean (by factor and risk quantile) plotted on y-axis. (character)
 #' @param quantile_col_name column name of risk quantile to go on x-axis (could be something like y_hat_percentile). (character)
-#' @param cluster_by_col_name column name of grouping for which we want to cluster standard errors (typically something like empi). (character) 
+#' @param cluster_by_col_name column name of grouping for which we want to cluster standard errors (typically something like empi). (character)
 #' @param plot_by_col_name column name of factor variable for which we want separate lines. (character)
 #' @param xlabel x-axis label. (character)
 #' @param ylabel y-axis label. (character)
 #' @param legend_label legend title, should describe element passed to 'plot_by_col_name'. (character)
 #' @param SE_line whether or not to include standard error band. (boolean)
 #' @param SE_style style of standard error band (either 'ribbon' or 'line'). (character)
-#' @param color_palette a single string referring to a palette (see http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3 for details), or a 
+#' @param color_palette a single string referring to a palette (see http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3 for details), or a
 #'                      vector of hex color codes matching the number of levels in plot_by_col_name. (character)
 #' @param ymin minimum of y-axis. (numeric)
 #' @param make_footnote whether or not to include a footnote on the plot (boolean)
-#' 
+#'
+#' @return g created plot
+#'
 #' @examples \dontrun{
 #' data <- copy(ehR_cohort)
 #' data[, prediction_decile := add_quantile(prediction, 10)]
@@ -38,21 +40,21 @@
 
 # function to create calibration plot - observed by predicted
 plot_calibration_by_risk_quantile_by_factor <- function(
-	data, 
-	output_file, 
-	outcome_col_name, 
-	quantile_col_name, 
-	cluster_by_col_name, 
-	plot_by_col_name, 
-	xlabel, 
-	ylabel, 
+	data,
+	output_file,
+	outcome_col_name,
+	quantile_col_name,
+	cluster_by_col_name,
+	plot_by_col_name,
+	xlabel,
+	ylabel,
 	legend_label,
 	color_palette = 'Oranges',
 	SE_line = TRUE,
-	SE_style = 'ribbon', 
+	SE_style = 'ribbon',
 	ymin = 0,
 	make_footnote = TRUE) {
-	
+
 	# compute means
 	data[, mean_obs_outcome := mean(get(outcome_col_name)), by = c(quantile_col_name, plot_by_col_name)]
 
@@ -95,17 +97,17 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	# create calibration plot - with LINES for SE
 	if(!SE_line | (SE_line & SE_style == 'line')) {
 		calibration_plot <- ggplot(data = plot_dt, aes(y = mean_obs_outcome, x = get(quantile_col_name), color = factor(get(plot_by_col_name)))) +
-						   geom_point() + 
+						   geom_point() +
 						   geom_line(aes(group = factor(get(plot_by_col_name)))) +
-						   color_scale + 
-						   theme_bw() + 
-						   theme(legend.position = 'bottom') + 
-						   xlab(xlabel) + 
-						   ylab(ylabel) + 
+						   color_scale +
+						   theme_bw() +
+						   theme(legend.position = 'bottom') +
+						   xlab(xlabel) +
+						   ylab(ylabel) +
 	             # determine where the axes begin, make sure y axis is %
 	             scale_y_continuous(labels = scales::percent, limits = c(ymin, NA)) +
 	             scale_x_continuous(breaks = pretty_breaks())
-	
+
 		# add line segments to plot for confidence intervals
 		if (SE_line) {
 			for (quantile in unique(plot_dt[, get(quantile_col_name)])) {
@@ -123,18 +125,18 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	# create calibration plot - with RIBBON for SE
 	if(SE_line == TRUE & SE_style == 'ribbon'){
 		calibration_plot <- ggplot(data = plot_dt, aes(
-			y = mean_obs_outcome, 
-			x = get(quantile_col_name), 
-			color = factor(get(plot_by_col_name)), 
+			y = mean_obs_outcome,
+			x = get(quantile_col_name),
+			color = factor(get(plot_by_col_name)),
 			fill = factor(get(plot_by_col_name)))) +
 			geom_line(aes(group = factor(get(plot_by_col_name))), linetype = 'dashed') +
 		    geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), color = 'white', alpha = 0.25) +
-		    geom_point() + 
+		    geom_point() +
 		    color_scale +
-		    fill_scale + 
-		    xlab(xlabel) + 
-		    ylab(ylabel) + 
-		    theme_bw() + 
+		    fill_scale +
+		    xlab(xlabel) +
+		    ylab(ylabel) +
+		    theme_bw() +
 		    theme(legend.position = 'bottom') +
 			scale_y_continuous(labels = scales::percent, limits = c(ymin, NA))+
 			scale_x_continuous(breaks = pretty_breaks())
@@ -149,6 +151,8 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 
 	# save
 	ggsave(output_file, g)
+
+	return(g)
 }
 
 #----------------------------------------------------------------------------#
