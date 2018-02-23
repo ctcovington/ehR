@@ -71,7 +71,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 
 	# table for plot
 	plot_dt <- unique(data, by = c(quantile_col_name, plot_by_col_name))
-	data[, c('mean_obs_outcome', 'prediction_decile', 'lower_ci', 'upper_ci') := NULL]
+	# data[, c('mean_obs_outcome', 'prediction_decile', 'lower_ci', 'upper_ci') := NULL]
 
 	# set minimum y based on plot_dt
 	ymin <- ifelse(min(plot_dt$lower_ci) < ymin, NA, ymin) # accout for edge case where CI goes below ymin [if not, keep ymin to original value]
