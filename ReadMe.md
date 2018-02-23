@@ -53,7 +53,7 @@ any changes: 'package_management/contribution_guide.txt'
 
 # 4. Test by installing from the branch
 library(devtools)
-install_git("git://github.com/sysmedlab/ehR.git", branch = "[branch name])
+install_git("git://github.com/sysmedlab/ehR.git", branch = [branch name])
 ````
 
 - Package Management Tools
