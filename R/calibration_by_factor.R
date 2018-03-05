@@ -27,8 +27,9 @@
 #'                      vector of hex color codes matching the number of levels in plot_by_col_name. (character)
 #' @param ymin minimum of y-axis. (numeric)
 #' @param make_footnote whether or not to include a footnote on the plot (boolean)
+#' @param return_plot whether or not to return created plot (boolean)'
 #'
-#' @return g created plot
+#' @return g optionally returns created plot
 #'
 #' @examples \dontrun{
 #' data <- copy(ehR_cohort)
@@ -53,7 +54,8 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	SE_line = TRUE,
 	SE_style = 'ribbon',
 	ymin = 0,
-	make_footnote = TRUE) {
+	make_footnote = TRUE,
+	return_plot = FALSE) {
 
 	# compute means
 	data[, mean_obs_outcome := mean(get(outcome_col_name)), by = c(quantile_col_name, plot_by_col_name)]
@@ -69,7 +71,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 
 	# table for plot
 	plot_dt <- unique(data, by = c(quantile_col_name, plot_by_col_name))
-	data[, c('mean_obs_outcome', 'prediction_decile', 'lower_ci', 'upper_ci') := NULL]
+	# data[, c('mean_obs_outcome', 'prediction_decile', 'lower_ci', 'upper_ci') := NULL]
 
 	# set minimum y based on plot_dt
 	ymin <- ifelse(min(plot_dt$lower_ci) < ymin, NA, ymin) # accout for edge case where CI goes below ymin [if not, keep ymin to original value]
@@ -94,6 +96,12 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 		fill_scale  <- scale_fill_brewer(palette = color_palette, guide = FALSE)
 	}
 
+	# need to set number of x-axis breaks if less than 5 to avoid ticks (quantiles)
+	# with decimal point (i.e. for quartiles, default x-axis ticks
+	# would be 1.0 1.5 2.0 2.5 3.0 3.5 4.0)
+	n_breaks <- ifelse(uniqueN(data[, get(quantile_col_name)]) < 5,
+											uniqueN(data[, get(quantile_col_name)]), 5)
+
 	# create calibration plot - with LINES for SE
 	if(!SE_line | (SE_line & SE_style == 'line')) {
 		calibration_plot <- ggplot(data = plot_dt, aes(y = mean_obs_outcome, x = get(quantile_col_name), color = factor(get(plot_by_col_name)))) +
@@ -106,7 +114,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 						   ylab(ylabel) +
 	             # determine where the axes begin, make sure y axis is %
 	             scale_y_continuous(labels = scales::percent, limits = c(ymin, NA)) +
-	             scale_x_continuous(breaks = pretty_breaks())
+	             scale_x_continuous(breaks = pretty_breaks(n = n_breaks))
 
 		# add line segments to plot for confidence intervals
 		if (SE_line) {
@@ -139,7 +147,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 		    theme_bw() +
 		    theme(legend.position = 'bottom') +
 			scale_y_continuous(labels = scales::percent, limits = c(ymin, NA))+
-			scale_x_continuous(breaks = pretty_breaks())
+			scale_x_continuous(breaks = pretty_breaks(n = n_breaks))
 	}
 
 	# add footnotes if set to TRUE
@@ -153,8 +161,9 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	if (!is.na(output_file) | output_file == '') {
 		ggsave(output_file, g)
 	}
-
-	return(g)
+	if (return_plot) {
+		return(g)
+	}
 }
 
 #----------------------------------------------------------------------------#
