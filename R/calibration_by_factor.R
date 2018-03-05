@@ -158,7 +158,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	}
 
 	# save output if path is not NA
-	if (!is.na(output_file) | output_file == '') {
+	if (!is.na(output_file) & output_file != '') {
 		ggsave(output_file, g)
 	}
 	if (return_plot) {
