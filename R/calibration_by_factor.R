@@ -131,6 +131,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	}
 
 	# create calibration plot - with RIBBON for SE
+	plot_dt[, get(quantile_col_name) := as.numeric(get(quantile_col_name))] # convert quantile column to numeric (if not already) for better plotting
 	if (SE_line == TRUE & SE_style == 'ribbon') {
 		calibration_plot <- ggplot(data = plot_dt, aes(
 			y = mean_obs_outcome,
