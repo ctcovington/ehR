@@ -13,7 +13,7 @@
 #' @import data.table
 #'
 #' @param data data.table object containing data to be plotted. (data table)
-#' @param output_file filepath to which we write plot. (character)
+#' @param output_file filepath to which we write plot (if NA or '', plot will not save). (character)
 #' @param outcome_col_name column name of outcome for which we want the mean (by factor and risk quantile) plotted on y-axis. (character)
 #' @param quantile_col_name column name of risk quantile to go on x-axis (could be something like y_hat_percentile). (character)
 #' @param cluster_by_col_name column name of grouping for which we want to cluster standard errors (typically something like empi). (character)
@@ -123,7 +123,7 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 	}
 
 	# create calibration plot - with RIBBON for SE
-	if(SE_line == TRUE & SE_style == 'ribbon'){
+	if (SE_line == TRUE & SE_style == 'ribbon') {
 		calibration_plot <- ggplot(data = plot_dt, aes(
 			y = mean_obs_outcome,
 			x = get(quantile_col_name),
@@ -149,8 +149,10 @@ plot_calibration_by_risk_quantile_by_factor <- function(
 		g <- calibration_plot
 	}
 
-	# save
-	ggsave(output_file, g)
+	# save output if path is not NA
+	if (!is.na(output_file) | output_file == '') {
+		ggsave(output_file, g)
+	}
 
 	return(g)
 }
